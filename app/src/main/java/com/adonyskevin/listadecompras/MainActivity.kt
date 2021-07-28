@@ -13,12 +13,9 @@ class MainActivity : AppCompatActivity() {
         val adapter = ArrayAdapter<String>(
             this,
             android.R.layout.simple_list_item_1)
-
-
+        
         val lista = findViewById<ListView>(R.id.list_produtos)
         lista.adapter = adapter
-
-
 
         val btn_adicionar = findViewById<Button>(R.id.btn_adicionar)
         btn_adicionar.setOnClickListener{
