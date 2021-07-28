@@ -2,4 +2,10 @@
     <string name="app_name">Lista de Compras</string>
     <string name="inserir">inserir</string>
     <string name="nome_produto">Nome do produto</string>
+    <string name="cadastro_produto">Cadastro de Produto</string>
+    <string name="hint_produto">Biscoito</string>
+    <string name="hint_quantidade">3</string>
+    <string name="quantidade">Quantidade</string>
+    <string name="valor">Valor</string>
+    <string name="hint_valor">R$ 0.00</string>
 </resources>
