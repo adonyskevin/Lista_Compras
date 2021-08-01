@@ -10,12 +10,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val adapter = ArrayAdapter<String>(
-            this,
-            android.R.layout.simple_list_item_1)
-        
+        val produtosAdapter = ProdutoAdapter(this)
+
         val lista = findViewById<ListView>(R.id.list_produtos)
-        lista.adapter = adapter
+        lista.adapter = produtosAdapter
 
         val btn_adicionar = findViewById<Button>(R.id.btn_adicionar)
         btn_adicionar.setOnClickListener{
@@ -27,11 +25,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         lista.setOnItemLongClickListener { adapterView, view, i, l ->
-            val item = adapter.getItem(i)
-            adapter.remove(item)
+            val item = produtosAdapter.getItem(i)
+            produtosAdapter.remove(item)
 
             //Retorno indicando que o click foi realizado com sucesso
             true
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val adapter = findViewById<ListView>(R.id.list_produtos).adapter as ProdutoAdapter
+        adapter.clear()
+        adapter.addAll(produtosGlobal)
     }
 }

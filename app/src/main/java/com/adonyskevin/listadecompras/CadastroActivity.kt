@@ -24,7 +24,7 @@ class CadastroActivity : AppCompatActivity() {
             if ((produto.isNotEmpty()) && (qtd.isNotEmpty()) && (valor.isNotEmpty())){
                 //Enviando o item para a lista
                 val prod = Produto(produto, qtd.toInt(), valor.toDouble())
-                
+
                 produtosGlobal.add(prod)
 
                 edt_produto.text.clear()
