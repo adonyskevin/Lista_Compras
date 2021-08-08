@@ -1,5 +1,6 @@
 package com.adonyskevin.listadecompras
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,8 +18,8 @@ class MainActivity : AppCompatActivity() {
         val lista = findViewById<ListView>(R.id.list_produtos)
         lista.adapter = produtosAdapter
 
-        val btn_adicionar = findViewById<Button>(R.id.btn_adicionar)
-        btn_adicionar.setOnClickListener{
+        val btnAdicionar = findViewById<Button>(R.id.btn_adicionar)
+        btnAdicionar.setOnClickListener{
             //Criando intent explícita
             val intent = Intent(this, CadastroActivity::class.java)
 
@@ -45,6 +46,7 @@ class MainActivity : AppCompatActivity() {
         preencheTotal()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun preencheTotal() {
         val soma = produtosGlobal.sumOf{it.valor * it.quantidade}
         val f = NumberFormat.getCurrencyInstance(Locale("pt", "br"))
