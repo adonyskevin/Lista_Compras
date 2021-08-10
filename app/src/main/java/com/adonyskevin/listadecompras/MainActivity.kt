@@ -9,6 +9,8 @@ import java.text.NumberFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
+    //private var helper: ListaComprasDatabase = ListaComprasDatabase.getInstance(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
             //Retorno indicando que o click foi realizado com sucesso
             true
         }
+        //helper = ListaComprasDatabase(this)
     }
 
     override fun onResume() {

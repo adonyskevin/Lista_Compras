@@ -24,7 +24,7 @@ class ListaComprasDatabase(context: Context) : SQLiteOpenHelper(context, NOME_BA
     override fun onCreate(db: SQLiteDatabase?) {
         //Criação de tabelas
         val sql =   "CREATE TABLE $NOME_TABELA (\n" +
-                "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,\n" +
+                "_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,\n" +
                 "nome varchar(100) NOT NULL,\n" +
                 "quantidade INTEGER NOT NULL,\n" +
                 "valor REAL NOT NULL,\n" +

@@ -8,3 +8,5 @@ data class Produto(
     val quantidade: Int,
     val valor: Double,
     val foto: Bitmap? = null)
+
+
