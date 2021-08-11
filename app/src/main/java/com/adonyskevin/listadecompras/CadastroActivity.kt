@@ -67,18 +67,16 @@ class CadastroActivity : AppCompatActivity() {
 
     private fun salvarProduto(nome: String, quantidade: Int, valor: Double, foto: Bitmap?): Long {
         val db: SQLiteDatabase = helper.writableDatabase
-        val values: ContentValues? = null
-        values!!.put("nome", nome)
+        val values = ContentValues()
+        values.put("nome", nome)
         values.put("quantidade", quantidade.toString())
         values.put("valor", valor)
         values.put("foto", foto?.toByteArray())
-
         return db.insert("produtos", null, values)
     }
 
     private var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            // There are no request codes
             val data: Intent? = result.data
 
             if (data != null){
