@@ -2,15 +2,19 @@ package com.adonyskevin.listadecompras
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
+import androidx.core.database.getBlobOrNull
 import java.text.NumberFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    //private var helper: ListaComprasDatabase = ListaComprasDatabase.getInstance(this)
+    private lateinit var helper: ListaComprasDatabase
 
+    @SuppressLint("Recycle")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -19,6 +23,8 @@ class MainActivity : AppCompatActivity() {
 
         val lista = findViewById<ListView>(R.id.list_produtos)
         lista.adapter = produtosAdapter
+
+        helper = ListaComprasDatabase(this)
 
         val btnAdicionar = findViewById<Button>(R.id.btn_adicionar)
         btnAdicionar.setOnClickListener{
@@ -38,13 +44,40 @@ class MainActivity : AppCompatActivity() {
             //Retorno indicando que o click foi realizado com sucesso
             true
         }
-        //helper = ListaComprasDatabase(this)
+    }
+
+    @SuppressLint("Recycle")
+    private fun preencherProdutos(helper: ListaComprasDatabase) {
+        val db: SQLiteDatabase = helper.readableDatabase
+        val cursor: Cursor = db.rawQuery("SELECT * FROM produtos", null)
+        val totalRegistros: Int = cursor.count
+
+        if (totalRegistros > 0){
+            cursor.moveToFirst()
+            var prod: Produto?
+            var i = 0
+            while (i < totalRegistros){
+                prod = Produto(
+                    cursor.getInt(cursor.getColumnIndex("_id")),
+                    cursor.getString(cursor.getColumnIndex("nome")).toString(),
+                    cursor.getInt(cursor.getColumnIndex("quantidade")),
+                    cursor.getDouble(cursor.getColumnIndex("valor")),
+                    cursor.getBlobOrNull(cursor.getColumnIndex("foto"))?.toBitmap()
+                )
+
+                produtosGlobal.add(prod)
+                cursor.moveToNext()
+                i++;
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
         val adapter = findViewById<ListView>(R.id.list_produtos).adapter as ProdutoAdapter
         adapter.clear()
+        produtosGlobal.clear()
+        preencherProdutos(this.helper)
         adapter.addAll(produtosGlobal)
         preencheTotal()
     }
