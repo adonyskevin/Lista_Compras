@@ -3,23 +3,25 @@ package com.adonyskevin.listadecompras
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.*
-import androidx.core.database.getBlobOrNull
+import android.widget.Button
+import android.widget.ListView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import java.text.NumberFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var helper: ListaComprasDatabase
+    private lateinit var produtosAdapter: ProdutoAdapter
 
     @SuppressLint("Recycle")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val produtosAdapter = ProdutoAdapter(this)
+        produtosAdapter = ProdutoAdapter(this)
 
         val lista = findViewById<ListView>(R.id.list_produtos)
         lista.adapter = produtosAdapter
@@ -37,20 +39,30 @@ class MainActivity : AppCompatActivity() {
 
         lista.setOnItemLongClickListener { adapterView, view, i, l ->
             val item = produtosAdapter.getItem(i)
-            produtosAdapter.remove(item)
-            produtosGlobal.remove(item)
-            preencheTotal()
+            val idProduto = item!!.id
 
-            //Retorno indicando que o click foi realizado com sucesso
+            excluirProduto(idProduto)
+            Toast.makeText(this, "Produto excluído com sucesso!", Toast.LENGTH_LONG).show()
+
+            listarProdutos(this.helper)
             true
         }
     }
 
+    private fun excluirProduto(idProduto: Int) {
+        val db = helper.writableDatabase
+        db.delete("produtos", "_id = $idProduto", null)
+    }
+
     @SuppressLint("Recycle")
-    private fun preencherProdutos(helper: ListaComprasDatabase) {
-        val db: SQLiteDatabase = helper.readableDatabase
+    private fun listarProdutos(helper: ListaComprasDatabase) {
+        val db = helper.readableDatabase
         val cursor: Cursor = db.rawQuery("SELECT * FROM produtos", null)
         val totalRegistros: Int = cursor.count
+
+        val adapter = findViewById<ListView>(R.id.list_produtos).adapter as ProdutoAdapter
+        adapter.clear()
+        produtosGlobal.clear()
 
         if (totalRegistros > 0){
             cursor.moveToFirst()
@@ -62,24 +74,21 @@ class MainActivity : AppCompatActivity() {
                     cursor.getString(cursor.getColumnIndex("nome")).toString(),
                     cursor.getInt(cursor.getColumnIndex("quantidade")),
                     cursor.getDouble(cursor.getColumnIndex("valor")),
-                    cursor.getBlobOrNull(cursor.getColumnIndex("foto"))?.toBitmap()
+                    cursor.getBlob(cursor.getColumnIndex("foto"))?.toBitmap()
                 )
 
                 produtosGlobal.add(prod)
                 cursor.moveToNext()
-                i++;
+                i++
             }
+            adapter.addAll(produtosGlobal)
+            preencheTotal()
         }
     }
 
     override fun onResume() {
         super.onResume()
-        val adapter = findViewById<ListView>(R.id.list_produtos).adapter as ProdutoAdapter
-        adapter.clear()
-        produtosGlobal.clear()
-        preencherProdutos(this.helper)
-        adapter.addAll(produtosGlobal)
-        preencheTotal()
+        listarProdutos(this.helper)
     }
 
     @SuppressLint("SetTextI18n")

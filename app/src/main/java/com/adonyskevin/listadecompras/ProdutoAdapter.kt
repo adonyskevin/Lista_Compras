@@ -33,9 +33,9 @@ class ProdutoAdapter(contexto: Context) : ArrayAdapter<Produto>(contexto, 0){
             txtQtd.text = item.quantidade.toString()
             txtValor.text = item.valor.toString()
 
-            if (item.foto != null){
+            //if (item.foto != null){
                 imgProduto.setImageBitmap(item.foto)
-            }
+            //}
         }
 
         //obtendo a instância do objeto de formatação

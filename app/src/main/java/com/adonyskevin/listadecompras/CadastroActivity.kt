@@ -38,14 +38,10 @@ class CadastroActivity : AppCompatActivity() {
             val valor = edtValor.text.toString()
 
             if ((produto.isNotEmpty()) && (qtd.isNotEmpty()) && (valor.isNotEmpty())){
-                //Enviando o item para a lista
-                //val prod = Produto(produto, qtd.toInt(), valor.toDouble(), imageBitMap)
-
-                //val idProduto: Long = salvarProduto(prod)
                 val idProduto: Long = salvarProduto(produto, qtd.toInt(), valor.toDouble(), imageBitMap)
+
                 //Verifica se a inserção funcionou
                 if (idProduto != -1L){
-                    //produtosGlobal.add(prod)
                     Toast.makeText(this, "Produto inserido com sucesso!.", Toast.LENGTH_SHORT).show()
 
                     edtProduto.text.clear()
